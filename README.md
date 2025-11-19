@@ -4,6 +4,8 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 
+> **Note:** This is a Placeholder mirror of the original project directory currently going through a security clearing procedure and when complete will be released to the public.
+
 ## 🎯 Overview
 
 The Cognitive Parliament is a production-grade orchestration platform for coordinating multiple AI models to solve complex, multi-faceted problems through structured consensus and specialized role-based reasoning.
