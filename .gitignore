@@ -1,0 +1,89 @@
+# Cognitive Parliament - Git Ignore Rules
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Secrets and Credentials
+.env
+.env.*
+secrets/
+*.key
+*.pem
+credentials.json
+
+# Data and Logs
+data/sessions/*
+!data/sessions/README.md
+data/logs/*
+!data/logs/README.md
+data/artifacts/*
+!data/artifacts/README.md
+data/telemetry/*
+!data/telemetry/README.md
+*.log
+
+# Research Data (Large files)
+research/data/*
+!research/data/README.md
+*.csv
+*.parquet
+*.h5
+
+# Temporary Files
+*.tmp
+*.bak
+.temp/
+
+# Docker
+docker-compose.override.yml
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
