@@ -24,8 +24,8 @@ The Cognitive Parliament is a production-grade orchestration platform for coordi
 
 ```bash
 # Clone repository
-git clone https://github.com/user/cognitive-parliament.git
-cd cognitive-parliament
+git clone https://github.com/hah23255/advanced-agentic-framework-aaf.git
+cd cognitive-paliament
 
 # Install dependencies
 make install
