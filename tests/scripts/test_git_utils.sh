@@ -5,7 +5,6 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-TEST_TMP_DIR=$(mktemp -d)
 
 # Colors
 GREEN='\033[0;32m'
@@ -42,8 +41,8 @@ test_clean_repo() {
     echo "Test: check_uncommitted_changes with clean repository"
     
     # Create a temporary git repo
-    mkdir -p "$TEST_TMP_DIR"
-    cd "$TEST_TMP_DIR"
+    local test_dir=$(mktemp -d)
+    cd "$test_dir"
     git init -q
     git config user.email "test@example.com"
     git config user.name "Test User"
@@ -57,7 +56,9 @@ test_clean_repo() {
     assert_equals "0" "$result" "Clean repository should return 0"
     
     cd "$PROJECT_ROOT"
-    rm -rf "$TEST_TMP_DIR"
+    if [[ -n "$test_dir" && -d "$test_dir" && "$test_dir" == /tmp/* ]]; then
+        rm -rf "$test_dir"
+    fi
 }
 
 # Test 2: check_uncommitted_changes returns 1 for dirty repo
@@ -66,8 +67,8 @@ test_dirty_repo() {
     echo "Test: check_uncommitted_changes with uncommitted changes"
     
     # Create a temporary git repo
-    mkdir -p "$TEST_TMP_DIR"
-    cd "$TEST_TMP_DIR"
+    local test_dir=$(mktemp -d)
+    cd "$test_dir"
     git init -q
     git config user.email "test@example.com"
     git config user.name "Test User"
@@ -86,7 +87,9 @@ test_dirty_repo() {
     assert_equals "1" "$result" "Dirty repository should return 1"
     
     cd "$PROJECT_ROOT"
-    rm -rf "$TEST_TMP_DIR"
+    if [[ -n "$test_dir" && -d "$test_dir" && "$test_dir" == /tmp/* ]]; then
+        rm -rf "$test_dir"
+    fi
 }
 
 # Test 3: verify_clean_state without --force exits on dirty repo
@@ -95,8 +98,8 @@ test_verify_without_force() {
     echo "Test: verify_clean_state without --force on dirty repo"
     
     # Create a temporary git repo
-    mkdir -p "$TEST_TMP_DIR"
-    cd "$TEST_TMP_DIR"
+    local test_dir=$(mktemp -d)
+    cd "$test_dir"
     git init -q
     git config user.email "test@example.com"
     git config user.name "Test User"
@@ -115,7 +118,9 @@ test_verify_without_force() {
     assert_equals "1" "$result" "verify_clean_state should fail without --force on dirty repo"
     
     cd "$PROJECT_ROOT"
-    rm -rf "$TEST_TMP_DIR"
+    if [[ -n "$test_dir" && -d "$test_dir" && "$test_dir" == /tmp/* ]]; then
+        rm -rf "$test_dir"
+    fi
 }
 
 # Test 4: verify_clean_state with --force succeeds on dirty repo
@@ -124,8 +129,8 @@ test_verify_with_force() {
     echo "Test: verify_clean_state with --force on dirty repo"
     
     # Create a temporary git repo
-    mkdir -p "$TEST_TMP_DIR"
-    cd "$TEST_TMP_DIR"
+    local test_dir=$(mktemp -d)
+    cd "$test_dir"
     git init -q
     git config user.email "test@example.com"
     git config user.name "Test User"
@@ -142,7 +147,9 @@ test_verify_with_force() {
     assert_equals "0" "$result" "verify_clean_state should succeed with --force on dirty repo"
     
     cd "$PROJECT_ROOT"
-    rm -rf "$TEST_TMP_DIR"
+    if [[ -n "$test_dir" && -d "$test_dir" && "$test_dir" == /tmp/* ]]; then
+        rm -rf "$test_dir"
+    fi
 }
 
 # Run all tests
