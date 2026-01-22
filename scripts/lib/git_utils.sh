@@ -3,6 +3,8 @@
 
 # Check if there are uncommitted changes in the repository
 # Returns 0 if clean, 1 if there are changes
+# Note: Uses git status --porcelain to catch all types of changes:
+#   - Modified files, staged changes, and untracked files
 # Usage: check_uncommitted_changes
 check_uncommitted_changes() {
     if [[ -n $(git status --porcelain) ]]; then

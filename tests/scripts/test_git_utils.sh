@@ -5,7 +5,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-TEST_TMP_DIR="/tmp/git_utils_test_$$"
+TEST_TMP_DIR=$(mktemp -d)
 
 # Colors
 GREEN='\033[0;32m'
@@ -52,11 +52,9 @@ test_clean_repo() {
     git commit -q -m "Initial commit"
     
     # Test clean repo
-    if check_uncommitted_changes; then
-        assert_equals "0" "0" "Clean repository should return 0"
-    else
-        assert_equals "0" "1" "Clean repository should return 0"
-    fi
+    check_uncommitted_changes
+    local result=$?
+    assert_equals "0" "$result" "Clean repository should return 0"
     
     cd "$PROJECT_ROOT"
     rm -rf "$TEST_TMP_DIR"
@@ -80,12 +78,12 @@ test_dirty_repo() {
     # Make uncommitted change
     echo "modified" >> test.txt
     
-    # Test dirty repo
-    if check_uncommitted_changes; then
-        assert_equals "1" "0" "Dirty repository should return 1"
-    else
-        assert_equals "1" "1" "Dirty repository should return 1"
-    fi
+    # Test dirty repo (disable set -e temporarily since we expect non-zero)
+    set +e
+    check_uncommitted_changes
+    local result=$?
+    set -e
+    assert_equals "1" "$result" "Dirty repository should return 1"
     
     cd "$PROJECT_ROOT"
     rm -rf "$TEST_TMP_DIR"
@@ -109,12 +107,12 @@ test_verify_without_force() {
     # Make uncommitted change
     echo "modified" >> test.txt
     
-    # Test verify_clean_state without force
-    if verify_clean_state > /dev/null 2>&1; then
-        assert_equals "1" "0" "verify_clean_state should fail without --force on dirty repo"
-    else
-        assert_equals "1" "1" "verify_clean_state should fail without --force on dirty repo"
-    fi
+    # Test verify_clean_state without force (disable set -e temporarily)
+    set +e
+    verify_clean_state > /dev/null 2>&1
+    local result=$?
+    set -e
+    assert_equals "1" "$result" "verify_clean_state should fail without --force on dirty repo"
     
     cd "$PROJECT_ROOT"
     rm -rf "$TEST_TMP_DIR"
@@ -139,11 +137,9 @@ test_verify_with_force() {
     echo "modified" >> test.txt
     
     # Test verify_clean_state with force
-    if verify_clean_state --force > /dev/null 2>&1; then
-        assert_equals "0" "0" "verify_clean_state should succeed with --force on dirty repo"
-    else
-        assert_equals "0" "1" "verify_clean_state should succeed with --force on dirty repo"
-    fi
+    verify_clean_state --force > /dev/null 2>&1
+    local result=$?
+    assert_equals "0" "$result" "verify_clean_state should succeed with --force on dirty repo"
     
     cd "$PROJECT_ROOT"
     rm -rf "$TEST_TMP_DIR"
